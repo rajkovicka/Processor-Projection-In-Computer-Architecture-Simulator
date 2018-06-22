@@ -1,0 +1,245 @@
+!Provera starta!
+madr00 br (if !START then madr00);
+!Citanje instrukcije!
+madr01 PCout1, MOST1_2, ldMAR, incPC;
+madr02 eMAR, rdCPU, br (if !fcCPU then madr02);
+madr03 MDRout1, ldIR0, ldGPRAR; 
+madr04 br (if gropr then madrAC);  
+madr05 br (if gradr then madrAC);                 
+madr06 br (if l1 then madr22);             
+madr07 br (if l1_arlog then madr10);          
+madr08 PCout1, MOST1_2, ldMAR, incPC;
+madr09 eMAR, rdCPU, br (if !fcCPU then madr09);
+madr0A MDRout1, ldIR1;
+madr0B br (if l2_brnch then madr22);    
+madr0C br (if l2_arlog then madr10);   
+madr0D PCout1, MOST1_2, ldMAR, incPC;  
+madr0E eMAR, rdCPU, br (if !fcCPU then madr0E);
+madr0F MDRout1, ldIR2, br (if l3_jump then madr22);
+!Adresiranja!
+madr10 bradr;
+!Imm! 
+madr11 br (if LDW then madr13);     
+madr12 IRJAout2, MOST2_1, ldBB, br madr22; 
+madr13 IRJAout2, ldBW, br madr22;
+!Memdir!
+madr14 IRDAout3, MOST3_2, ldMAR, br (if store then madr22); 
+madr15 br madr17;
+!Regindpom!
+madr16 GPRout1, IRPOMout3, ADDout2, ldMAR, br (if store then madr22);  
+!Citanje operanada!
+madr17 eMAR, rdCPU, br (if !fcCPU then madr17);
+madr18 br (if LDW then madr1A);   
+madr19 MDRout1, ldBB, br madr22;   
+madr1A MDRout1, ldDWL, incMAR;
+madr1B eMAR, rdCPU, br (if !fcCPU then madr1B);
+madr1C MDRout1, ldDWH;
+madr1D DWout2, ldBW, br madr22;
+!Regdir!
+madr1E br (if store then madr22); 
+madr1F br (if LDW then madr21); 
+madr20 GPRout1, ldBB, br madr22; 
+madr21 GPRout1, MOST1_2, ldBW, br madr22;
+!Izvrsavanje instrukcije!
+madr22 bropr;
+!Halt!
+madr23 clSTART, br madr00;
+!Intd!
+madr24 clPSWI, br madrAC;
+!Inte!
+madr25 stPSWI, br madrAC;
+!Ld! 
+madr26 BBout2, MOST2_1, ldAB;
+madr27 ldN, ldZ, ldC, ldV, br madrAC;
+!Ldw!
+madr28 BWout2,ldAW;
+madr29 ldN, ldZ, ldC, ldV, br madrAC;    
+!Loadh!
+madr2A AWout3, MOST3_2, MOST2_1, ldDWL; 
+madr2B BBout2, MOST2_1, ldDWH;
+madr2C DWout2, ldAW;
+madr2D ldN, ldZ, ldC, ldV, br madrAC;
+!Lea!
+madr2E ldAW;
+madr2F ldN, ldZ, ldC, ldV, br madrAC;
+!St!
+madr30 br (if regdir then madr34); 
+madr31 ABout3, mxMDR, ldMDR;   
+madr32 eMAR, eMDR, wrCPU, br (if !fcCPU then madr32);
+madr33 br madrAC;
+madr34 ABout3, wrGPR, br madrAC;
+!Stw!
+madr35 br (if regdir then madr3B);   
+madr36 AWout3, mxMDR, ldMDR;
+madr37 eMAR, eMDR, wrCPU, br (if !fcCPU then madr37);
+madr38 AWHout3, mxMDR, ldMDR, incMAR;
+madr39 eMAR, eMDR, wrCPU, br (if !fcCPU then madr39);
+madr3A br madrAC;
+madr3B AWout3, wrGPR, br madrAC;
+!Popall!
+madr3C AWout3, MOST3_2, ldBW; 
+madr3D ABout3, MOST3_2, ldAW; 
+madr3E AWHout3; 
+madr3F not, ALUout1; 
+madr40 MOST1_2, ldAW, ldGPRAR; 
+madr41 SPout2, ldMAR, incSP;
+madr42 eMAR, rdCPU, br (if !fcCPU then madr42);
+madr43 SPout2, ldMAR, incSP, MDRout1, ldDWL;
+madr44 eMAR, rdCPU, br (if !fcCPU then madr44);
+madr45 MDRout1, ldDWH;
+madr46 DWout2, MOST2_1, MOST1_3, wrGPR;
+madr47 incGPRAR;
+madr48 incGPRAR;
+madr49 incGPRAR; 
+madr4A SPout2, ldMAR, incSP;
+madr4B eMAR, rdCPU, br (if !fcCPU then madr4B);
+madr4C SPout2, ldMAR, incSP, MDRout1, ldDWL;
+madr4D eMAR, rdCPU, br (if !fcCPU then madr4D);
+madr4E MDRout1, ldDWH;
+madr4F DWout2, MOST2_1, MOST1_3, wrGPR;
+madr50 incGPRAR;
+madr51 incGPRAR;
+madr52 incGPRAR; 
+madr53 SPout2, ldMAR, incSP;
+madr54 eMAR, rdCPU, br (if !fcCPU then madr54);
+madr55 SPout2, ldMAR, incSP, MDRout1, ldDWL;
+madr56 eMAR, rdCPU, br (if !fcCPU then madr56);
+madr57 MDRout1, ldDWH;
+madr58 DWout2, MOST2_1, MOST1_3, wrGPR;
+madr59 incGPRAR;
+madr5A incGPRAR;
+madr5B incGPRAR; 
+madr5C SPout2, ldMAR, incSP;
+madr5D eMAR, rdCPU, br (if !fcCPU then madr5D);
+madr5E SPout2, ldMAR, incSP, MDRout1, ldDWL;
+madr5F eMAR, rdCPU, br (if !fcCPU then madr5F);
+madr60 MDRout1, ldDWH;
+madr61 DWout2, MOST2_1, MOST1_3, wrGPR;
+madr62 BWout2, ldAW;
+madr63 br madr AC;
+!Pushall!
+madr64 AWout3, MOST3_2, ldBW; 
+madr65 ABout3, MOST3_2, ldAW;
+madr66 AWHout3, MOST3_2, MOST2_1, ldGPRAR, decSP;
+madr67 SPout2, ldMAR;
+madr68 GPRout1, MOST1_2, ldAW;
+madr69 AWHout3, mxMDR, ldMDR, decSP;
+madr6A eMAR, eMDR, wrCPU, br (if !fcCPU then madr6A);
+madr6B SPout2, ldMAR;
+madr6C AWout3, mxMDR, ldMDR, decSP, incGPRAR;
+madr6D eMAR, eMDR, wrCPU, br (if !fcCPU then madr6D);
+madr6E SPout2, ldMAR;
+madr6F GPRout1, MOST1_2, ldAW;
+madr70 AWHout3, mxMDR, ldMDR, decSP;
+madr71 eMAR, eMDR, wrCPU, br (if !fcCPU then madr71);
+madr72 SPout2, ldMAR;
+madr73 AWout3, mxMDR, ldMDR, decSP, incGPRAR;
+madr74 eMAR, eMDR, wrCPU, br (if !fcCPU then madr74);
+madr75 SPout2, ldMAR;
+madr76 GPRout1, MOST1_2, ldAW;
+madr77 AWHout3, mxMDR, ldMDR, decSP;
+madr78 eMAR, eMDR, wrCPU, br (if !fcCPU then madr78);
+madr79 SPout2, ldMAR;
+madr7A AWout3, mxMDR, ldMDR, decSP, incGPRAR;
+madr7B eMAR, eMDR, wrCPU, br (if !fcCPU then madr7B);
+madr7C SPout2, ldMAR;
+madr7D GPRout1, MOST1_2, ldAW;
+madr7E AWHout3, mxMDR, ldMDR, decSP;
+madr7F eMAR, eMDR, wrCPU, br (if !fcCPU then madr7F);
+madr80 SPout2, ldMAR;
+madr81 AWout3, mxMDR, ldMDR;
+madr82 eMAR, eMDR, wrCPU, br (if !fcCPU then madr82), BWout2, ldAW, br madrAC;
+!Stivtp!
+madr83 AWout3, ldIVTP, br madrAC;
+!Stsp!
+madr84 AWout3, ldSP, br madrAC;
+!Add!
+madr85 BBout2, ABout3, add, ALUout1, ldAB, ldC, ldV;
+madr86 ldN, ldZ, br madrAC;
+!Sub!
+madr87 BBout2, ABout3, sub, ALUout1, ldAB, ldC, ldV;
+madr88 ldN, ldZ, br madrAC;
+!And!
+madr89 BBout2, ABout3, and, ALUout1, ldAB;
+madr8A ldN, ldZ, ldC, ldV, br madrAC;
+!Or!
+madr8B BBout2, ABout3, or, ALUout1, ldAB;
+madr8C ldN, ldZ, ldC, ldV, br madrAC;
+!Xor!
+madr8D BBout2, ABout3, xor, ALUout1, ldAB;
+madr8E ldN, ldZ, ldC, ldV, br madrAC;
+!Not!
+madr8F ABout3, not, ALUout1, ldAB;
+madr90 ldN, ldZ, ldC, ldV, br madrAC;
+!Asr, Lsr, Ror!
+madr91 shr, ldC;
+madr92 ldN, ldZ, ldV, br madrAC;
+!Asl, Lsl, Rol!
+madr93 shl, ldC;
+madr94 ldN, ldZ, ldV, br madrAC;
+!Beql,..., Blsseu!
+madr95 IRBRout3, br (if !brpom then madrAC);
+madr96 PCout1, IRPOMout3, ADDout2, ldPC, br madrAC;
+!Jmp!
+madr97 IRDAout3, MOST3_2, ldPC, br madrAC;
+!Jsr!
+madr98 decSP;
+madr99 SPout2, ldMAR, PCHout3, mxMDR, ldMDR;
+madr9A eMAR, eMDR, wrCPU, br (if !fcCPU then madr9A);
+madr9B decSP;
+madr9C SPout2, ldMAR, PCLout3, mxMDR, ldMDR;
+madr9D eMAR, eMDR, wrCPU, br (if !fcCPU then madr9D);
+madr9E IRDAout3, MOST3_2, ldPC, br madrAC;
+!Rti!
+madr9F SPout2, ldMAR, incSP;
+madrA0 eMAR, rdCPU, br (if !fcCPU then madrA0);
+madrA1 MDRout1, ldPSWL; 
+madrA2 SPout2, ldMAR, incSP;
+madrA3 eMAR, rdCPU, br (if !fcCPU then madrA3);
+madrA4 MDRout1, ldPSWH;
+!Rts!
+madrA5 SPout2, ldMAR, incSP;
+madrA6 eMAR, rdCPU, br (if !fcCPU then madrA6);
+madrA7 MDRout1, ldDWL;
+madrA8 SPout2, ldMAR, incSP;
+madrA9 eMAR, rdCPU, br (if !fcCPU then madrA9);
+madrAA MDRout1, ldDWH;
+madrAB DWout2, ldPC, br madrAC;
+!Opsluzivanje prekida!
+madrAC br (if gradr then madrAE);
+madrAD br (if gropr then madrAF), br madrB0;
+madrAE stPRADR, br madrB0;
+madrAF stPRCOD;
+madrB0 br (if !prekid then madr00);
+!Cuvanje konteksta procesora!
+madrB1 decSP;
+madrB2 SPout2, ldMAR, PCHout3, mxMDR, ldMDR;
+madrB3 eMAR, eMDR, wrCPU, br (if !fcCPU then madrB3);
+madrB4 decSP;
+madrB5 SPout2, ldMAR, PCLout3, mxMDR, ldMDR;
+madrB6 eMAR, eMDR, wrCPU, br (if !fcCPU then madrB6);
+madrB7 decSP;
+madrB8 SPout2, ldMAR, PSWHout3, mxMDR, ldMDR;
+madrB9 eMAR, eMDR, wrCPU, br (if !fcCPU then madrB9);
+madrBA decSP;
+madrBB SPout2, ldMAR, PSWLout3, mxMDR, ldMDR;
+madrBC eMAR, eMDR, wrCPU, br (if !fcCPU then madrBC);
+!Utvrdivanje broja ulaza!
+madrBD br (if !PRINS then madrBF);
+madrBE IRPOMout3, ldBR, clPRINS, br madrC8;
+madrBF br (if !PRCOD then madrC1);
+madrC0 UINTout3, ldBR, clPRCOD, br madrC8;
+madrC1 br (if !PRADR then madrC3);
+madrC2 UINTout3, ldBR, clPRADR, br madrC8;
+madrC3 br (if !PRINM then madrC5);
+madrC4 UINTout3, ldBR, clPRINM, br madrC8;
+madrC5 br (if !printr then madrC7);
+madrC6 UEXTout3, ldBR, clINTR, ldL, br madrC8;
+madrC7 UINTout3, ldBR;
+!Utvrdivanje adrese prekidne rutine!
+madrC8 IVTPout1, IVTDSPout3, ADDout2, ldMAR;
+madrC9 eMAR, rdCPU, br (if !fcCPU then madrC9);
+madrCA MDRout1, ldDWL, incMAR;
+madrCB eMAR, rdCPU, br (if !fcCPU then madrCB);
+madrCC MDRout1, ldDWH;
+madrCD DWout2,ldPC,clPSWI,clPSWT, br madr00;
